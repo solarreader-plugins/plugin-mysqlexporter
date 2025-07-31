@@ -152,7 +152,7 @@ public class SimpleMySQLConnection implements MySQLConnection {
    * @throws SQLException if a connection cannot be established
    */
   private Connection createConnection() throws SQLException {
-    String url = String.format("jdbc:mysql://%s:%s/%s", host, port, dbName);
+    String url = String.format("jdbc:mariadb://%s:%s/%s", host, port, dbName);
     Logger.debug("Connecting to " + url);
     DriverManager.setLoginTimeout(5);
     return DriverManager.getConnection(url, user, password);

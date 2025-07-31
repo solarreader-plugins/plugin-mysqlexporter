@@ -52,16 +52,11 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-            <version>${mysql.connector.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.mysql</groupId>
-                    <artifactId>mysql-connector-j</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.5.4</version>
         </dependency>
 
     </dependencies>
@@ -122,7 +117,8 @@
                             <Software-Repository>https://github.com/solarreader-plugins/plugin-plugin-mysqlexporter
                             </Software-Repository>
                             <Software-Icon>mysql.svg</Software-Icon>
-                            <Software-Support-Info>supports MySQL 5.x and 8.x</Software-Support-Info>
+                            <Software-Support-Info>supports MySQL 5.x, 8.x and MariaDB 10.x or higher
+                            </Software-Support-Info>
                             <Software-Interfaces>NONE</Software-Interfaces>
                             <Software-Protocol>NONE</Software-Protocol>
                         </manifestEntries>
@@ -144,7 +140,7 @@
                             <createDependencyReducedPom>true</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
-                                    <include>com.mysql:mysql-connector-j</include>
+                                    <include>org.mariadb.jdbc:mariadb-java-client</include>
                                 </includes>
                             </artifactSet>
                             <filters>
