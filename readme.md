@@ -5,25 +5,24 @@
 
 # MySQL Exporter Plugin for Solarreader
 
-This plugin enables exporting solar data from the [Solarreader](https://github.com/solarreader-core/solarreader) project
-to any MySQL-compatible database.
+This plugin allows you to export solar data from the [Solarreader](https://github.com/solarreader-core/solarreader) project to any MySQL-compatible database.
 
 ## Features
 
 - Supports MySQL versions 5.x and 8.x
-- Exports solar metrics directly from the Solarreader core project
-- GUI-based configuration – no manual editing of files required
-- Compatible with standard MySQL installations
-- Optimized for performance and reliability
+- Direct export of solar metrics from the Solarreader core
+- User-friendly GUI for configuration – no manual file editing required
+- Fully compatible with standard MySQL installations
+- Optimized for performance and stability
 
 ## Requirements
 
-- A running MySQL server (5.x or 8.x)
+- A running MySQL server (version 5.x or 8.x)
 - An existing MySQL database with pre-created tables
 - A MySQL user account with the following privileges:
-  - `INSERT` (to write new data entries)
+  - `INSERT` – to write new data entries
   - `SELECT` – required for server version detection
-- Main project **Solarreader**, which can be found here:  
+- The main project **Solarreader**, available at:  
   [https://github.com/solarreader-core/solarreader](https://github.com/solarreader-core/solarreader)
 
 

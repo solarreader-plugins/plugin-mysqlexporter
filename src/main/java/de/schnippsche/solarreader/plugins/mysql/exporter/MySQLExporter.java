@@ -24,16 +24,9 @@ package de.schnippsche.solarreader.plugins.mysql.exporter;
 import de.schnippsche.solarreader.backend.connection.general.ConnectionFactory;
 import de.schnippsche.solarreader.backend.exporter.AbstractExporter;
 import de.schnippsche.solarreader.backend.exporter.TransferData;
-import de.schnippsche.solarreader.backend.protocol.KnownProtocol;
-import de.schnippsche.solarreader.backend.provider.SupportedInterface;
 import de.schnippsche.solarreader.backend.table.Table;
 import de.schnippsche.solarreader.backend.util.Setting;
-import de.schnippsche.solarreader.frontend.ui.HtmlInputType;
-import de.schnippsche.solarreader.frontend.ui.HtmlWidth;
-import de.schnippsche.solarreader.frontend.ui.UIInputElementBuilder;
-import de.schnippsche.solarreader.frontend.ui.UIList;
-import de.schnippsche.solarreader.frontend.ui.UITextElementBuilder;
-import de.schnippsche.solarreader.plugin.PluginMetadata;
+import de.schnippsche.solarreader.frontend.ui.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -49,25 +42,18 @@ import org.tinylog.Logger;
  * AbstractExporter} and handles the queuing and export of {@link TransferData} objects using a
  * specified or default {@link MySQLConnection} factory.
  */
-@PluginMetadata(
-    name = "MySQLExporter",
-    version = "1.0.1",
-    author = "Stefan Töngi",
-    url = "https://github.com/solarreader-plugins/plugin-MySQLExporter",
-    svgImage = "mysqlexporter.svg",
-    supportedInterfaces = {SupportedInterface.NONE},
-    usedProtocol = KnownProtocol.NONE,
-    supports = "MySQL 5.x, 8.x")
 public class MySQLExporter extends AbstractExporter {
   private static final String DBNAME = "dbname";
-  private static final String REQUIRED_ERROR = "mysqlexporter.required.error";
+  private static final String REQUIRED_ERROR = "mysql.exporter.required.error";
   private final BlockingQueue<TransferData> queue;
   private final ConnectionFactory<MySQLConnection> connectionFactory;
   private MySQLConnection connection;
   private Thread consumerThread;
   private volatile boolean running = true;
 
-  /** Constructs a new {@code MySQLExporter} with a default {@link MySQLConnectionFactory}. */
+  /**
+   * Constructs a new {@code MySQLExporter} with a default {@link MySQLConnectionFactory}.
+   */
   public MySQLExporter() {
     this(new MySQLConnectionFactory());
   }
@@ -92,7 +78,7 @@ public class MySQLExporter extends AbstractExporter {
   public void initialize() {
     Logger.debug("initialize mysql exporter");
     consumerThread = new Thread(this::processQueue);
-    consumerThread.setName("mysqlexporterThread");
+    consumerThread.setName("MySQLExporterThread");
     consumerThread.start();
   }
 
@@ -117,7 +103,7 @@ public class MySQLExporter extends AbstractExporter {
   public String testExporterConnection(Setting setting) throws IOException {
     try {
       MySQLConnection testConnection = connectionFactory.createConnection(setting);
-      String message = resourceBundle.getString("mysqlexporter.connection.successful");
+      String message = resourceBundle.getString("mysql.exporter.connection.successful");
       String version = testConnection.getDatabaseVersion();
       Logger.info("connection successful to {}", version);
       return MessageFormat.format(message, version);
@@ -132,7 +118,7 @@ public class MySQLExporter extends AbstractExporter {
     UIList uiList = new UIList();
     uiList.addElement(
         new UITextElementBuilder()
-            .withLabel(resourceBundle.getString("mysqlexporter.title"))
+            .withLabel(resourceBundle.getString("mysql.exporter.title"))
             .build());
     uiList.addElement(
         new UIInputElementBuilder()
@@ -140,9 +126,9 @@ public class MySQLExporter extends AbstractExporter {
             .withType(HtmlInputType.TEXT)
             .withColumnWidth(HtmlWidth.HALF)
             .withRequired(true)
-            .withTooltip(resourceBundle.getString("mysqlexporter.host.tooltip"))
-            .withLabel(resourceBundle.getString("mysqlexporter.host.text"))
-            .withPlaceholder(resourceBundle.getString("mysqlexporter.host.text"))
+            .withTooltip(resourceBundle.getString("mysql.exporter.host.tooltip"))
+            .withLabel(resourceBundle.getString("mysql.exporter.host.text"))
+            .withPlaceholder(resourceBundle.getString("mysql.exporter.host.text"))
             .withInvalidFeedback(resourceBundle.getString(REQUIRED_ERROR))
             .build());
     uiList.addElement(
@@ -151,9 +137,9 @@ public class MySQLExporter extends AbstractExporter {
             .withType(HtmlInputType.NUMBER)
             .withColumnWidth(HtmlWidth.HALF)
             .withRequired(true)
-            .withTooltip(resourceBundle.getString("mysqlexporter.port.tooltip"))
-            .withLabel(resourceBundle.getString("mysqlexporter.port.text"))
-            .withPlaceholder(resourceBundle.getString("mysqlexporter.port.text"))
+            .withTooltip(resourceBundle.getString("mysql.exporter.port.tooltip"))
+            .withLabel(resourceBundle.getString("mysql.exporter.port.text"))
+            .withPlaceholder(resourceBundle.getString("mysql.exporter.port.text"))
             .withInvalidFeedback(resourceBundle.getString(REQUIRED_ERROR))
             .build());
     uiList.addElement(
@@ -162,9 +148,9 @@ public class MySQLExporter extends AbstractExporter {
             .withType(HtmlInputType.TEXT)
             .withColumnWidth(HtmlWidth.HALF)
             .withRequired(true)
-            .withTooltip(resourceBundle.getString("mysqlexporter.user.tooltip"))
-            .withLabel(resourceBundle.getString("mysqlexporter.user.text"))
-            .withPlaceholder(resourceBundle.getString("mysqlexporter.user.text"))
+            .withTooltip(resourceBundle.getString("mysql.exporter.user.tooltip"))
+            .withLabel(resourceBundle.getString("mysql.exporter.user.text"))
+            .withPlaceholder(resourceBundle.getString("mysql.exporter.user.text"))
             .build());
     uiList.addElement(
         new UIInputElementBuilder()
@@ -172,9 +158,9 @@ public class MySQLExporter extends AbstractExporter {
             .withType(HtmlInputType.TEXT)
             .withColumnWidth(HtmlWidth.HALF)
             .withRequired(false)
-            .withTooltip(resourceBundle.getString("mysqlexporter.password.tooltip"))
-            .withLabel(resourceBundle.getString("mysqlexporter.password.text"))
-            .withPlaceholder(resourceBundle.getString("mysqlexporter.password.text"))
+            .withTooltip(resourceBundle.getString("mysql.exporter.password.tooltip"))
+            .withLabel(resourceBundle.getString("mysql.exporter.password.text"))
+            .withPlaceholder(resourceBundle.getString("mysql.exporter.password.text"))
             .build());
     uiList.addElement(
         new UIInputElementBuilder()
@@ -182,9 +168,9 @@ public class MySQLExporter extends AbstractExporter {
             .withType(HtmlInputType.TEXT)
             .withColumnWidth(HtmlWidth.HALF)
             .withRequired(true)
-            .withTooltip(resourceBundle.getString("mysqlexporter.name.tooltip"))
-            .withLabel(resourceBundle.getString("mysqlexporter.name.text"))
-            .withPlaceholder(resourceBundle.getString("mysqlexporter.name.text"))
+            .withTooltip(resourceBundle.getString("mysql.exporter.name.tooltip"))
+            .withLabel(resourceBundle.getString("mysql.exporter.name.text"))
+            .withPlaceholder(resourceBundle.getString("mysql.exporter.name.text"))
             .withInvalidFeedback(resourceBundle.getString(REQUIRED_ERROR))
             .build());
     return Optional.of(uiList);
@@ -201,7 +187,9 @@ public class MySQLExporter extends AbstractExporter {
     return setting;
   }
 
-  /** Processes the export queue by taking each entry and exporting it. */
+  /**
+   * Processes the export queue by taking each entry and exporting it.
+   */
   private void processQueue() {
     while (running) {
       try {
@@ -223,7 +211,7 @@ public class MySQLExporter extends AbstractExporter {
    * table contains a timestamp column, it uses that; otherwise, it uses the current timestamp. If
    * the table is empty, the export is skipped.
    *
-   * @param table the table containing the data to be exported
+   * @param table         the table containing the data to be exported
    * @param zonedDateTime the timestamp for the export.
    * @throws IOException if an I/O error occurs during the export
    */
@@ -242,7 +230,9 @@ public class MySQLExporter extends AbstractExporter {
         (System.currentTimeMillis() - startTime));
   }
 
-  /** Updates the configuration of the exporter based on the exporter data. */
+  /**
+   * Updates the configuration of the exporter based on the exporter data.
+   */
   @Override
   protected void updateConfiguration() {
     this.connection = connectionFactory.createConnection(exporterData.getSetting());
