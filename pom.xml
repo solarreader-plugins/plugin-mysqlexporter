@@ -16,24 +16,34 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <mainClass>de.schnippsche.solarreader.plugins.mysql.exporter.MySQLExporter</mainClass>
+
         <!-- Plugin Versions -->
         <spotless.version>2.46.1</spotless.version>
         <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
         <maven.jar.plugin.version>3.4.1</maven.jar.plugin.version>
         <maven.surefire.plugin.version>3.5.3</maven.surefire.plugin.version>
         <maven.shade.plugin>3.6.0</maven.shade.plugin>
-        <!-- Dependency Versions -->
+        <maven.resource.plugin>3.3.1</maven.resource.plugin>
         <solarreader.version>2.0.1</solarreader.version>
-        <!-- This mySQL connector supports both legacy 5.x and newer 8.x databases -->
-        <!-- Note: Newer versions are compatible only with 8.x databases -->
-        <mysql.connector.version>8.2.0</mysql.connector.version>
         <junit.version>5.12.2</junit.version>
         <mockito.version>5.18.0</mockito.version>
+        <connector.version>3.5.4</connector.version>
+
+        <!-- Project Metadata -->
+        <software.main.class>${mainClass}</software.main.class>
+        <software.name>MySQLExporter</software.name>
+        <software.version>${project.version}</software.version>
+        <software.build.date>${maven.build.timestamp}</software.build.date>
+        <software.author>Stefan Töngi</software.author>
+        <software.repository>https://github.com/solarreader-plugins/plugin-plugin-mysqlexporter</software.repository>
+        <software.icon>mysql.svg</software.icon>
+        <software.support.info>supports MySQL 5.x, 8.x and MariaDB 10.x or higher</software.support.info>
+        <software.interfaces>NONE</software.interfaces>
+        <software.protocol>NONE</software.protocol>
+
     </properties>
 
-
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
             <groupId>de.schnippsche</groupId>
             <artifactId>Solarreader</artifactId>
@@ -52,15 +62,21 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.5.4</version>
+            <version>${connector.version}</version>
         </dependency>
 
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <artifactId>spotless-maven-plugin</artifactId>
@@ -109,21 +125,15 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Software-Version>${project.version}</Software-Version>
-                            <Software-Build-Date>${maven.build.timestamp}</Software-Build-Date>
                             <Main-Class>${mainClass}</Main-Class>
-                            <Software-Name>MySQLExporter</Software-Name>
-                            <Software-Author>Stefan Töngi</Software-Author>
-                            <Software-Repository>https://github.com/solarreader-plugins/plugin-plugin-mysqlexporter
-                            </Software-Repository>
-                            <Software-Icon>mysql.svg</Software-Icon>
-                            <Software-Support-Info>supports MySQL 5.x, 8.x and MariaDB 10.x or higher
-                            </Software-Support-Info>
-                            <Software-Interfaces>NONE</Software-Interfaces>
-                            <Software-Protocol>NONE</Software-Protocol>
                         </manifestEntries>
                     </archive>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resource.plugin}</version>
             </plugin>
 
             <plugin>
