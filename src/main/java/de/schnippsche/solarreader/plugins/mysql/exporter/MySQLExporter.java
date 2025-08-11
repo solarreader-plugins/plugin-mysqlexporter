@@ -49,7 +49,7 @@ public class MySQLExporter extends AbstractExporter {
   private final ConnectionFactory<MySQLConnection> connectionFactory;
   private MySQLConnection connection;
   private Thread consumerThread;
-  private volatile boolean running = true;
+  private volatile boolean running;
 
   /**
    * Constructs a new {@code MySQLExporter} with a default {@link MySQLConnectionFactory}.
@@ -77,15 +77,24 @@ public class MySQLExporter extends AbstractExporter {
   @Override
   public void initialize() {
     Logger.debug("initialize mysql exporter");
-    consumerThread = new Thread(this::processQueue);
-    consumerThread.setName("MySQLExporterThread");
+    running = true;
+    consumerThread = new Thread(this::processQueue, "mySQLExporterThread");
     consumerThread.start();
   }
 
   @Override
   public void shutdown() {
     running = false;
-    consumerThread.interrupt();
+    if (consumerThread != null && consumerThread.isAlive()) {
+      consumerThread.interrupt();
+      try {
+        consumerThread.join();
+      } catch (InterruptedException e) {
+        Logger.warn("shutdown mysql exporter interrupted");
+        Thread.currentThread().interrupt();
+      }
+    }
+    Logger.debug("shutdown mysql exporter finished");
   }
 
   @Override
@@ -196,10 +205,8 @@ public class MySQLExporter extends AbstractExporter {
         TransferData transferData = queue.take();
         doStandardExport(transferData);
       } catch (InterruptedException e) {
-        if (!running) {
-          break; // Exit loop if not running
-        }
         Thread.currentThread().interrupt();
+        break;
       }
     }
   }
